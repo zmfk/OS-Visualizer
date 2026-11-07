@@ -18,7 +18,7 @@
     <a href="../virtual-memory/index.html" class="nav-item">实验三：页面置换</a>
   </nav>
   <div class="header-right">
-    <button class="btn-icon" id="themeBtn" title="切换主题">🌙</button>
+    <button class="btn-icon" id="global-theme-btn" title="切换主题">🌙</button>
   </div>
 </header>
 
@@ -90,7 +90,25 @@
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
+
 <script src="scheduler.js"></script>
 <script src="app.js"></script>
+<script>
+  // 全局统一主题切换逻辑
+  const globalThemeBtn = document.getElementById('global-theme-btn');
+  const savedTheme = localStorage.getItem('os-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  if (globalThemeBtn) globalThemeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+  if (globalThemeBtn) {
+    globalThemeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('os-theme', next);
+      globalThemeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+  }
+</script>
 </body>
 </html>

@@ -17,6 +17,9 @@
     <a href="../producer-consumer/index.html" class="nav-item active">实验二：进程同步</a>
     <a href="../virtual-memory/index.html" class="nav-item">实验三：页面置换</a>
   </nav>
+  <div class="header-right">
+    <button class="btn-icon" id="global-theme-btn" title="切换主题">🌙</button>
+  </div>
 </header>
 
 <main class="main">
@@ -28,14 +31,14 @@
   <section class="card" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
     <div style="display: flex; gap: 12px; align-items: center;">
       <label style="font-weight: 600; font-size: 14px; color: var(--text-secondary);">缓冲区容量：</label>
-      <input type="number" id="capacityInput" value="12" min="1" max="30" style="width: 70px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; text-align: center;">
+      <input type="number" id="capacityInput" value="12" min="1" max="30" style="width: 70px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; text-align: center; background: var(--bg-card); color: var(--text-primary);">
       <button id="resetBtn" class="btn btn-primary">重置并开始</button>
       <button id="pauseBtn" class="btn btn-outline">暂停</button>
     </div>
     <div style="display: flex; gap: 12px; align-items: center;">
       <label style="font-weight: 600; font-size: 14px; color: var(--text-secondary);">速度：</label>
       <input type="range" id="speedInput" min="0.25" max="4" step="0.25" value="1" style="accent-color: var(--accent);">
-      <span id="speedValue" style="background: #eff6ff; color: var(--accent); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold;">1x</span>
+      <span id="speedValue" style="background: rgba(59,130,246,0.1); color: var(--accent); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold;">1x</span>
     </div>
   </section>
 
@@ -75,7 +78,7 @@
     <h2 style="margin: 0 0 16px; font-size: 18px; border-left: 4px solid var(--accent); padding-left: 8px;">环形缓冲区</h2>
     <div style="display: flex; gap: 24px; font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; justify-content: center;">
       <span><i style="display: inline-block; width: 16px; height: 16px; border-radius: 4px; background: var(--bg-input); border: 1px solid var(--border); vertical-align: middle; margin-right: 6px;"></i>空缓冲区</span>
-      <span><i style="display: inline-block; width: 16px; height: 16px; border-radius: 4px; background: #dcfce7; border: 1px solid var(--success); vertical-align: middle; margin-right: 6px;"></i>有产品</span>
+      <span><i style="display: inline-block; width: 16px; height: 16px; border-radius: 4px; background: rgba(52, 211, 153, 0.2); border: 1px solid var(--success); vertical-align: middle; margin-right: 6px;"></i>有产品</span>
       <span><i style="display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--danger); vertical-align: middle; margin-right: 6px;"></i>生产指针</span>
       <span><i style="display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--accent); vertical-align: middle; margin-right: 6px;"></i>消费指针</span>
     </div>
@@ -92,5 +95,21 @@
 
 <script src="simulator.js"></script>
 <script src="app.js"></script>
+<script>
+  const globalThemeBtn = document.getElementById('global-theme-btn');
+  const savedTheme = localStorage.getItem('os-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  if (globalThemeBtn) globalThemeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+  if (globalThemeBtn) {
+    globalThemeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('os-theme', next);
+      globalThemeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+  }
+</script>
 </body>
 </html>

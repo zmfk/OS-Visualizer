@@ -7,39 +7,63 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="hero">
-    <div class="hero-content">
-      <span class="logo-badge">⚡ OS Visualizer</span>
-      <h1>操作系统核心机制可视化</h1>
-      <p>通过动画与交互，直观探索 CPU 调度、进程同步与虚拟存储器。</p>
-    </div>
+
+<!-- 主题切换按钮（悬浮在右上角） -->
+<div class="theme-toggle-wrapper">
+  <button class="btn-icon" id="global-theme-btn" title="切换主题">🌙</button>
+</div>
+
+<div class="hero">
+  <div class="hero-content">
+    <span class="logo-badge">⚡ OS Visualizer</span>
+    <h1>操作系统核心机制可视化</h1>
+    <p>通过动画与交互，直观探索 CPU 调度、进程同步与虚拟存储器。</p>
   </div>
+</div>
 
-  <div class="card-container">
-    <a href="./cpu-scheduler/index.html" class="exp-card">
-      <div class="card-icon blue">⏱️</div>
-      <h2>实验一：处理机调度</h2>
-      <p>模拟 FCFS、SJF、RR、MLFQ 等算法。配置进程信息，观察甘特图与平均周转时间。</p>
-      <div class="card-action">进入实验 <span>→</span></div>
-    </a>
+<div class="card-container">
+  <a href="./cpu-scheduler/index.html" class="exp-card">
+    <div class="card-icon blue">⏱️</div>
+    <h2>实验一：处理机调度</h2>
+    <p>模拟 FCFS、SJF、RR、MLFQ 等算法。配置进程信息，观察甘特图与平均周转时间。</p>
+    <div class="card-action">进入实验 <span>→</span></div>
+  </a>
 
-    <a href="./producer-consumer/index.html" class="exp-card">
-      <div class="card-icon green">🔄</div>
-      <h2>实验二：进程同步</h2>
-      <p>基于信号量 P/V 操作的生产者消费者问题。动态展示环形缓冲区与线程阻塞唤醒过程。</p>
-      <div class="card-action">进入实验 <span>→</span></div>
-    </a>
+  <a href="./producer-consumer/index.html" class="exp-card">
+    <div class="card-icon green">🔄</div>
+    <h2>实验二：进程同步</h2>
+    <p>基于信号量 P/V 操作的生产者消费者问题。动态展示环形缓冲区与线程阻塞唤醒过程。</p>
+    <div class="card-action">进入实验 <span>→</span></div>
+  </a>
 
-    <a href="./virtual-memory/index.html" class="exp-card">
-      <div class="card-icon purple">🧩</div>
-      <h2>实验三：请求分页系统</h2>
-      <p>模拟逻辑地址到物理地址的转换、缺页中断，以及 FIFO/LRU 页面置换算法动态演示。</p>
-      <div class="card-action">进入实验 <span>→</span></div>
-    </a>
-  </div>
-  
-  <footer class="page-footer">
-    <p>© 2026 zmfk · 课程设计展示</p>
-  </footer>
+  <a href="./virtual-memory/index.html" class="exp-card">
+    <div class="card-icon purple">🧩</div>
+    <h2>实验三：请求分页系统</h2>
+    <p>模拟逻辑地址到物理地址的转换、缺页中断，以及 FIFO/LRU 页面置换算法动态演示。</p>
+    <div class="card-action">进入实验 <span>→</span></div>
+  </a>
+</div>
+
+<footer class="page-footer">
+  <p>© 2026 zmfk · 课程设计展示</p>
+</footer>
+
+<script>
+  // 全局统一主题切换逻辑
+  const globalThemeBtn = document.getElementById('global-theme-btn');
+  const savedTheme = localStorage.getItem('os-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  if (globalThemeBtn) globalThemeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+  if (globalThemeBtn) {
+    globalThemeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('os-theme', next);
+      globalThemeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+  }
+</script>
 </body>
 </html>

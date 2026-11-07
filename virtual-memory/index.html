@@ -17,6 +17,9 @@
     <a href="../producer-consumer/index.html" class="nav-item">实验二：进程同步</a>
     <a href="../virtual-memory/index.html" class="nav-item active">实验三：页面置换</a>
   </nav>
+  <div class="header-right">
+    <button class="btn-icon" id="global-theme-btn" title="切换主题">🌙</button>
+  </div>
 </header>
 
 <main class="main">
@@ -28,7 +31,7 @@
   <section class="card" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
     <div style="display: flex; gap: 12px; align-items: center;">
       <label style="font-weight: 600; font-size: 14px; color: var(--text-secondary);">置换算法：</label>
-      <select id="algorithmSelect" style="padding: 8px; border: 1px solid var(--border); border-radius: 8px; outline: none;">
+      <select id="algorithmSelect" style="padding: 8px; border: 1px solid var(--border); border-radius: 8px; outline: none; background: var(--bg-card); color: var(--text-primary);">
         <option value="FIFO">先进先出 (FIFO)</option>
         <option value="LRU">最近最久未使用 (LRU)</option>
       </select>
@@ -36,12 +39,12 @@
     </div>
     <div style="display: flex; gap: 12px; align-items: center;">
       <label style="font-weight: 600; font-size: 14px; color: var(--text-secondary);">模拟逻辑地址：</label>
-      <input type="number" id="logicAddressInput" value="5000" style="width: 100px; padding: 8px; border: 1px solid var(--border); border-radius: 8px;">
+      <input type="number" id="logicAddressInput" value="5000" style="width: 100px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text-primary);">
       <button id="accessBtn" class="btn btn-outline" style="border-color: var(--purple); color: var(--purple);">访问该地址</button>
     </div>
   </section>
 
-  <section class="card" style="display: flex; align-items: center; justify-content: space-between; background: #1e293b; color: white;">
+  <section class="card" style="display: flex; align-items: center; justify-content: space-between; background: #1e293b; border-color: #1e293b; color: white;">
     <div class="pipe-step" id="step-logic" style="background: #334155; padding: 12px 24px; border-radius: 8px; min-width: 150px; text-align: center; border: 2px solid transparent;">
       <span style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">逻辑地址</span><span class="value" style="font-size: 18px; font-weight: bold; font-family: var(--mono);">-</span>
     </div>
@@ -104,5 +107,21 @@
 </main>
 
 <script src="app.js"></script>
+<script>
+  const globalThemeBtn = document.getElementById('global-theme-btn');
+  const savedTheme = localStorage.getItem('os-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  if (globalThemeBtn) globalThemeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+  if (globalThemeBtn) {
+    globalThemeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('os-theme', next);
+      globalThemeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+  }
+</script>
 </body>
 </html>
