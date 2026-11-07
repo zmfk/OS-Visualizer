@@ -1,8 +1,7 @@
-const PAGE_SIZE = 4096; // 4KB
+const PAGE_SIZE = 4096;
 const FRAME_COUNT = 4;
 const sequence = [7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1];
 
-// 核心数据结构
 let frames = new Array(FRAME_COUNT).fill(null); 
 let pageTable = []; 
 let pageFaults = 0;
@@ -12,7 +11,6 @@ let playTimer = null;
 let fifoQueue = [];
 let lruQueue = [];
 
-// UI 元素
 const algorithmSelect = document.getElementById('algorithmSelect');
 const startBtn = document.getElementById('startBtn');
 const nextBtn = document.getElementById('nextBtn');
@@ -21,7 +19,6 @@ const accessBtn = document.getElementById('accessBtn');
 const logicAddressInput = document.getElementById('logicAddressInput');
 const historyTableBody = document.getElementById('historyTableBody');
 
-// 初始化
 function initSystem() {
     clearInterval(playTimer);
     isPlaying = false;
@@ -31,13 +28,12 @@ function initSystem() {
     fifoQueue = [];
     lruQueue = [];
 
-    // 初始化页表 (假设共有 8 页，0-7)
     pageTable = Array.from({ length: 8 }, (_, i) => ({ page: i, valid: 0, frame: -1 }));
 
     document.getElementById('faultCount').textContent = '0';
     document.getElementById('faultRate').textContent = '0%';
     document.getElementById('logList').innerHTML = '';
-    historyTableBody.innerHTML = ''; // 清空历史记录表
+    historyTableBody.innerHTML = ''; 
     resetPipelineUI();
 
     renderFramesUI();
@@ -50,7 +46,6 @@ function initSystem() {
     autoBtn.textContent = '自动播放';
 }
 
-// 渲染物理块
 function renderFramesUI() {
     const container = document.getElementById('framesContainer');
     container.innerHTML = '';
@@ -63,7 +58,6 @@ function renderFramesUI() {
     }
 }
 
-// 渲染页表
 function renderTableUI() {
     const tbody = document.getElementById('pageTableBody');
     tbody.innerHTML = '';
@@ -79,7 +73,6 @@ function renderTableUI() {
     });
 }
 
-// 渲染序列
 function renderSequenceUI() {
     const container = document.getElementById('sequenceContainer');
     container.innerHTML = '';
@@ -92,7 +85,6 @@ function renderSequenceUI() {
     });
 }
 
-// 重置顶部流水线 UI
 function resetPipelineUI() {
     document.querySelectorAll('.pipe-step').forEach(el => {
         el.classList.remove('active', 'page-fault');
@@ -103,16 +95,13 @@ function resetPipelineUI() {
     document.querySelector('#step-physics .value').textContent = '-';
 }
 
-// 新增：把这一步的结果写入底部表格中
 function appendHistoryTable(pageNum, isFault, changedFrameIndex) {
     const tr = document.createElement('tr');
     
-    // 1. 状态列
     const statusTd = document.createElement('td');
     statusTd.textContent = isFault ? '缺页' : '命中';
     statusTd.className = isFault ? 'status-fault' : 'status-hit';
 
-    // 2. 访问列
     const pageTd = document.createElement('td');
     pageTd.textContent = pageNum;
     pageTd.style.fontWeight = 'bold';
@@ -121,28 +110,21 @@ function appendHistoryTable(pageNum, isFault, changedFrameIndex) {
     tr.appendChild(pageTd);
     tr.appendChild(statusTd);
 
-    // 3. 填入物理块的内容 (0~3)
     for (let i = 0; i < FRAME_COUNT; i++) {
         const td = document.createElement('td');
         td.textContent = frames[i] !== null ? frames[i] : '-';
-        
-        // 如果当前的物理块发生了变化（被新页面占用），加一个闪烁动画
         if (i === changedFrameIndex) {
-            td.classList.add('cell-changed');
-            td.style.fontWeight = 'bold';
-            td.style.color = isFault ? '#dc2626' : '#16a34a';
+            td.classList.add(isFault ? 'td-fault' : 'td-hit');
         }
         tr.appendChild(td);
     }
 
     historyTableBody.appendChild(tr);
     
-    // 自动滚动到表格底部
     const container = document.querySelector('.history-table-container');
     container.scrollTop = container.scrollHeight;
 }
 
-// ================= 核心：地址访问逻辑 =================
 function accessAddress(logicAddr, isAuto = false) {
     if (logicAddr < 0 || logicAddr > 32767) {
         alert("逻辑地址范围限制在 0 ~ 32767 (8页)");
@@ -166,7 +148,7 @@ function accessAddress(logicAddr, isAuto = false) {
     const pageData = pageTable[pageNum];
     
     let isFault = false;
-    let changedFrameIndex = -1; // 记录哪个物理块发生了变化
+    let changedFrameIndex = -1;
 
     if (pageData.valid === 0) {
         isFault = true;
@@ -197,7 +179,7 @@ function accessAddress(logicAddr, isAuto = false) {
         frames[frameIndex] = pageNum;
         pageTable[pageNum].valid = 1;
         pageTable[pageNum].frame = frameIndex;
-        changedFrameIndex = frameIndex; // 记录变化
+        changedFrameIndex = frameIndex;
 
         if (algo === 'FIFO') fifoQueue.push(pageNum);
         else lruQueue.push(pageNum);
@@ -213,7 +195,7 @@ function accessAddress(logicAddr, isAuto = false) {
         
     } else {
         const frameIndex = pageData.frame;
-        changedFrameIndex = frameIndex; // 命中时，说明这个块被访问了
+        changedFrameIndex = frameIndex;
         
         document.querySelector('#step-page').classList.add('active');
         document.querySelector('#step-page .value').textContent = `命中 (块 ${frameIndex})`;
@@ -235,7 +217,6 @@ function accessAddress(logicAddr, isAuto = false) {
         addLog(`<span class="log-hit">地址命中</span>：逻辑地址 ${logicAddr} -> 物理地址 ${physicsAddr}`, isAuto);
     }
 
-    // 🌟 调用方法，把这一步的结果记录到表格中
     appendHistoryTable(pageNum, isFault, changedFrameIndex);
 
     document.getElementById('faultCount').textContent = pageFaults;
@@ -258,7 +239,6 @@ function addLog(html, isAuto) {
     if (isAuto) return; 
 }
 
-// ================= 自动化序列执行 =================
 function nextStep() {
     if (currentIndex >= sequence.length) {
         nextBtn.disabled = true;

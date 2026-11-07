@@ -1,4 +1,4 @@
-/* ================= 统一全家桶导航栏 ================= */
+/* ================= 统一顶部导航栏 ================= */
 .global-header {
   display: flex; justify-content: space-between; align-items: center;
   padding: 0 28px; height: 48px; background: var(--bg-card);

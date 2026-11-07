@@ -8,15 +8,15 @@
 </head>
 <body>
 
-<!-- 统一顶部导航 -->
+<!-- 统一顶部导航栏 -->
 <header class="global-header">
   <div class="header-left">
     <span class="logo">⚡ OS Visualizer</span>
   </div>
   <nav class="header-nav">
-    <a href="https://zmfk.github.io/cpu-scheduler/" class="nav-item">实验一：CPU 调度</a>
-    <a href="https://zmfk.github.io/producer-consumer/" class="nav-item active">实验二：进程同步</a>
-    <a href="https://zmfk.github.io/page-replacement/" class="nav-item">实验三：页面置换</a>
+    <a href="../cpu-scheduler/index.html" class="nav-item">实验一：CPU 调度</a>
+    <a href="../producer-consumer/index.html" class="nav-item active">实验二：进程同步</a>
+    <a href="../virtual-memory/index.html" class="nav-item">实验三：页面置换</a>
   </nav>
 </header>
 
@@ -26,7 +26,6 @@
     <p class="subtitle">基于信号量 P/V 操作 · 环形缓冲区 · 同步与互斥演示</p>
   </div>
 
-  <!-- 控制面板 -->
   <section class="card controls">
     <div class="control-group">
       <label>缓冲区容量：
@@ -42,7 +41,6 @@
     </div>
   </section>
 
-  <!-- 信号量状态 -->
   <section class="stats-grid">
     <div class="card stat-card">
       <span class="stat-label">empty (空闲缓冲区)</span>
@@ -58,7 +56,6 @@
     </div>
   </section>
 
-  <!-- 线程状态 -->
   <section class="thread-grid">
     <div class="card thread-card producer-thread" id="producerCard">
       <div class="thread-header">
@@ -76,7 +73,6 @@
     </div>
   </section>
 
-  <!-- 环形缓冲区 -->
   <section class="card buffer-section">
     <h2>环形缓冲区</h2>
     <div class="buffer-legend">
@@ -91,7 +87,6 @@
     </div>
   </section>
 
-  <!-- 运行日志 -->
   <section class="card log-section">
     <h2>运行日志</h2>
     <ul id="logList" class="log-list"></ul>
