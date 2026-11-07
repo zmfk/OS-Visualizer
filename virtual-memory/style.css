@@ -1,0 +1,148 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: #f0f4f8; color: #1e293b;
+}
+header { text-align: center; padding: 24px 16px 8px; }
+header h1 { margin: 0 0 8px; font-size: 28px; }
+.subtitle { margin: 0; color: #64748b; }
+main { max-width: 1100px; margin: 0 auto; padding: 16px; }
+
+/* 控制面板 */
+.controls {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+  background: #fff; padding: 12px 16px; border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 16px;
+}
+.control-group { display: flex; align-items: center; gap: 8px; }
+select, input, button { padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; }
+button { border: none; background: #2563eb; color: #fff; cursor: pointer; transition: 0.2s; font-weight: bold;}
+button:hover:not(:disabled) { background: #1d4ed8; transform: translateY(-1px); }
+button:disabled { background: #94a3b8; cursor: not-allowed; }
+#accessBtn { background: #8b5cf6; }
+#accessBtn:hover { background: #7c3aed; }
+
+/* 地址转换流水线 */
+.address-pipeline {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #1e293b; color: white; padding: 16px; border-radius: 10px; margin-bottom: 16px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.pipe-step {
+  display: flex; flex-direction: column; align-items: center;
+  background: #334155; padding: 10px 20px; border-radius: 8px; min-width: 150px;
+  border: 2px solid transparent; transition: 0.3s;
+}
+.pipe-step.active { border-color: #38bdf8; box-shadow: 0 0 15px rgba(56,189,248,0.5); }
+.pipe-step .label { font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
+.pipe-step .value { font-size: 18px; font-weight: bold; font-family: monospace; }
+.pipe-step.page-fault .value { color: #f87171; }
+.pipe-arrow { color: #64748b; font-size: 20px; }
+
+/* 布局 */
+.main-content { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.panel {
+  background: #fff; border-radius: 10px; padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 16px;
+}
+h2 { margin: 0 0 16px; font-size: 18px; border-left: 4px solid #2563eb; padding-left: 8px; }
+
+/* 页表 */
+table { width: 100%; border-collapse: collapse; text-align: center; }
+th, td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+th { background: #f8fafc; color: #64748b; font-weight: 600; }
+tr.highlight td { background: #eff6ff; color: #1d4ed8; font-weight: bold; }
+
+/* 物理块 */
+.stats { display: flex; gap: 24px; margin-bottom: 16px; font-size: 16px; }
+.red { color: #dc2626; font-size: 20px; }
+.frames-container { display: flex; gap: 16px; justify-content: center; }
+.frame {
+  width: 80px; height: 80px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  border-radius: 12px; background: #f1f5f9; border: 2px solid #cbd5e1;
+  transition: 0.3s; position: relative;
+}
+.frame .block-id { position: absolute; top: 4px; left: 6px; font-size: 10px; color: #94a3b8; }
+.frame .page-num { font-size: 28px; font-weight: bold; color: #64748b; }
+.frame.filled { background: #dcfce7; border-color: #16a34a; }
+.frame.filled .page-num { color: #166534; }
+.frame.fault { animation: flashRed 0.5s ease; background: #fee2e2; border-color: #dc2626; }
+.frame.hit { animation: flashGreen 0.5s ease; }
+@keyframes flashRed { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(220,38,38,0.6); } }
+@keyframes flashGreen { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(22,163,74,0.6); } }
+
+/* 序列 */
+.sequence-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.seq-item {
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; background: #f1f5f9; color: #475569; font-weight: bold; transition: 0.3s;
+}
+.seq-item.current { background: #2563eb; color: white; transform: scale(1.2); box-shadow: 0 0 10px rgba(37,99,235,0.5); }
+.seq-item.passed { opacity: 0.4; }
+
+.action-bar { display: flex; gap: 12px; }
+
+/* ================= 优化后的置换记录表格 ================= */
+.history-table-container {
+  max-height: 320px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  /* 预留滚动条空间，防止出现滚动条时表格被挤压变形 */
+  scrollbar-gutter: stable; 
+}
+
+#historyTable {
+  width: 100%;
+  /* 锁定表格布局，保证列宽严格按比例分配，不会因为内容变化而抖动 */
+  table-layout: fixed; 
+  border-collapse: collapse;
+}
+
+#historyTable th {
+  position: sticky;
+  top: 0;
+  background: #f8fafc;
+  z-index: 2;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* 固定每列的宽度比例，防止挤压 */
+#historyTable th:nth-child(1), #historyTable td:nth-child(1) { width: 12%; } /* 访问序列 */
+#historyTable th:nth-child(2), #historyTable td:nth-child(2) { width: 16%; } /* 状态 */
+#historyTable th:nth-child(3), #historyTable td:nth-child(3),
+#historyTable th:nth-child(4), #historyTable td:nth-child(4),
+#historyTable th:nth-child(5), #historyTable td:nth-child(5),
+#historyTable th:nth-child(6), #historyTable td:nth-child(6) { width: 18%; } /* 物理块 */
+
+#historyTable td {
+  font-family: monospace;
+  font-size: 15px;
+  font-weight: 600;
+  /* 强制固定高度，防止行高跳动 */
+  height: 44px; 
+  padding: 0;
+  line-height: 44px;
+  white-space: nowrap;
+}
+
+/* 状态列的颜色 */
+.status-fault { color: #dc2626; background: #fef2f2; }
+.status-hit { color: #16a34a; background: #f0fdf4; }
+
+/* 被修改的物理块单元格：黄色闪烁 + 红色/绿色文字 */
+.td-fault { color: #dc2626; font-weight: bold; animation: flashCellRed 0.8s ease; }
+.td-hit { color: #16a34a; font-weight: bold; animation: flashCellGreen 0.8s ease; }
+
+@keyframes flashCellRed { 0% { background-color: #fecaca; } 100% { background-color: transparent; } }
+@keyframes flashCellGreen { 0% { background-color: #bbf7d0; } 100% { background-color: transparent; } }
+
+/* 日志 */
+ul { list-style: none; padding: 0; margin: 0; font-family: monospace; font-size: 13px; max-height: 200px; overflow-y: auto; }
+li { padding: 8px; border-bottom: 1px solid #f1f5f9; }
+li:nth-child(odd) { background: #f8fafc; }
+.log-fault { color: #dc2626; font-weight: bold; }
+.log-hit { color: #16a34a; font-weight: bold; }

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>请求分页存储管理与页面置换</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>请求分页存储管理模拟</h1>
+  <p class="subtitle">硬件地址转换 · 缺页中断 · FIFO/LRU 动态演示</p>
+</header>
+
+<main>
+  <section class="controls">
+    <div class="control-group">
+      <label>置换算法：
+        <select id="algorithmSelect">
+          <option value="FIFO">先进先出 (FIFO)</option>
+          <option value="LRU">最近最久未使用 (LRU)</option>
+        </select>
+      </label>
+      <button id="startBtn">重置系统</button>
+    </div>
+    
+    <div class="control-group addr-input-group">
+      <label>模拟逻辑地址：</label>
+      <input type="number" id="logicAddressInput" value="5000" placeholder="输入十进制地址">
+      <button id="accessBtn">访问该地址</button>
+    </div>
+  </section>
+
+  <!-- 地址转换流水线展示 -->
+  <section class="address-pipeline">
+    <div class="pipe-step" id="step-logic">
+      <span class="label">逻辑地址</span>
+      <span class="value">-</span>
+    </div>
+    <div class="pipe-arrow">➔</div>
+    <div class="pipe-step" id="step-split">
+      <span class="label">拆分：页号 + 偏移</span>
+      <span class="value">-</span>
+    </div>
+    <div class="pipe-arrow">➔</div>
+    <div class="pipe-step" id="step-page">
+      <span class="label">查页表 (状态)</span>
+      <span class="value">-</span>
+    </div>
+    <div class="pipe-arrow">➔</div>
+    <div class="pipe-step" id="step-physics">
+      <span class="label">物理地址</span>
+      <span class="value">-</span>
+    </div>
+  </section>
+
+  <div class="main-content">
+    <!-- 左侧：页表 -->
+    <section class="panel table-panel">
+      <h2>页表 (Page Table)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>页号</th>
+            <th>状态位 (存在位)</th>
+            <th>物理块号</th>
+          </tr>
+        </thead>
+        <tbody id="pageTableBody">
+          <!-- JS动态生成 -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 右侧：物理内存块 -->
+    <section class="panel memory-panel">
+      <h2>物理内存块 (共4块)</h2>
+      <div class="stats">
+        <span>缺页次数: <strong id="faultCount" class="red">0</strong></span>
+        <span>缺页率: <strong id="faultRate" class="red">0%</strong></span>
+      </div>
+      <div class="frames-container" id="framesContainer">
+        <!-- JS动态生成 4个物理块 -->
+      </div>
+    </section>
+  </div>
+
+  <!-- 底部：测试序列 -->
+  <section class="panel sequence-panel">
+    <h2>经典页面走向序列（点击“下一步”自动执行）</h2>
+    <div class="sequence-container" id="sequenceContainer"></div>
+    <div class="action-bar">
+      <button id="nextBtn" disabled>单步执行下一步</button>
+      <button id="autoBtn" disabled>自动播放</button>
+    </div>
+  </section>
+
+  <!-- 新增：置换过程时间轴表格 -->
+  <section class="panel history-panel">
+    <h2>置换过程记录表</h2>
+    <div class="history-table-container">
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>访问序列</th>
+            <th>状态</th>
+            <th>物理块 0</th>
+            <th>物理块 1</th>
+            <th>物理块 2</th>
+            <th>物理块 3</th>
+          </tr>
+        </thead>
+        <tbody id="historyTableBody">
+          <!-- JS 动态填入 -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 日志 -->
+  <section class="panel log-section">
+    <h2>执行日志</h2>
+    <ul id="logList"></ul>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

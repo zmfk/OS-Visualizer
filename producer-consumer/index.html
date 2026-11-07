@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实验二：生产者消费者问题可视化</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 统一顶部导航 -->
+<header class="global-header">
+  <div class="header-left">
+    <span class="logo">⚡ OS Visualizer</span>
+  </div>
+  <nav class="header-nav">
+    <a href="https://zmfk.github.io/cpu-scheduler/" class="nav-item">实验一：CPU 调度</a>
+    <a href="https://zmfk.github.io/producer-consumer/" class="nav-item active">实验二：进程同步</a>
+    <a href="https://zmfk.github.io/page-replacement/" class="nav-item">实验三：页面置换</a>
+  </nav>
+</header>
+
+<main class="container">
+  <div class="page-title">
+    <h1>生产者消费者问题可视化</h1>
+    <p class="subtitle">基于信号量 P/V 操作 · 环形缓冲区 · 同步与互斥演示</p>
+  </div>
+
+  <!-- 控制面板 -->
+  <section class="card controls">
+    <div class="control-group">
+      <label>缓冲区容量：
+        <input type="number" id="capacityInput" value="12" min="1" max="30">
+      </label>
+      <button id="resetBtn" class="btn btn-primary">重置并开始</button>
+      <button id="pauseBtn" class="btn btn-secondary">暂停</button>
+    </div>
+    <div class="control-group">
+      <label>速度：</label>
+      <input type="range" id="speedInput" min="0.25" max="4" step="0.25" value="1">
+      <span id="speedValue" class="badge">1x</span>
+    </div>
+  </section>
+
+  <!-- 信号量状态 -->
+  <section class="stats-grid">
+    <div class="card stat-card">
+      <span class="stat-label">empty (空闲缓冲区)</span>
+      <span class="stat-value" id="emptyCount">12</span>
+    </div>
+    <div class="card stat-card">
+      <span class="stat-label">full (已有产品)</span>
+      <span class="stat-value" id="fullCount">0</span>
+    </div>
+    <div class="card stat-card">
+      <span class="stat-label">mutex (互斥量)</span>
+      <span class="stat-value" id="mutexCount">1</span>
+    </div>
+  </section>
+
+  <!-- 线程状态 -->
+  <section class="thread-grid">
+    <div class="card thread-card producer-thread" id="producerCard">
+      <div class="thread-header">
+        <h3>生产者线程</h3>
+        <span class="status-dot"></span>
+      </div>
+      <p id="producerStatus">未启动</p>
+    </div>
+    <div class="card thread-card consumer-thread" id="consumerCard">
+      <div class="thread-header">
+        <h3>消费者线程</h3>
+        <span class="status-dot"></span>
+      </div>
+      <p id="consumerStatus">未启动</p>
+    </div>
+  </section>
+
+  <!-- 环形缓冲区 -->
+  <section class="card buffer-section">
+    <h2>环形缓冲区</h2>
+    <div class="buffer-legend">
+      <span><i class="legend-box empty"></i> 空缓冲区</span>
+      <span><i class="legend-box filled"></i> 有产品</span>
+      <span><i class="legend-border producer"></i> 生产指针</span>
+      <span><i class="legend-border consumer"></i> 消费指针</span>
+    </div>
+    
+    <div class="ring-container" id="bufferRing">
+      <div class="ring-center" id="ringCenter">等待开始</div>
+    </div>
+  </section>
+
+  <!-- 运行日志 -->
+  <section class="card log-section">
+    <h2>运行日志</h2>
+    <ul id="logList" class="log-list"></ul>
+  </section>
+</main>
+
+<script src="simulator.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
