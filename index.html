@@ -8,9 +8,8 @@
 </head>
 <body>
 
-<!-- 主题切换按钮（悬浮在右上角） -->
 <div class="theme-toggle-wrapper">
-  <button class="btn-icon" id="global-theme-btn" title="切换主题">🌙</button>
+  <button class="btn-icon" id="themeBtn" title="切换主题">🌙</button>
 </div>
 
 <div class="hero">
@@ -49,18 +48,16 @@
 </footer>
 
 <script>
-  // 全局统一主题切换逻辑
-  const globalThemeBtn = document.getElementById('global-theme-btn');
-  const savedTheme = localStorage.getItem('os-theme') || 'light';
+  const globalThemeBtn = document.getElementById('themeBtn');
+  const savedTheme = localStorage.getItem('cpu-theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   if (globalThemeBtn) globalThemeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
   if (globalThemeBtn) {
     globalThemeBtn.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('os-theme', next);
+      localStorage.setItem('cpu-theme', next);
       globalThemeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
     });
   }
