@@ -8,7 +8,6 @@
 </head>
 <body>
 
-<!-- 统一顶部导航栏 -->
 <header class="global-header">
   <div class="header-left">
     <span class="logo">⚡ OS Visualizer</span>
@@ -20,76 +19,74 @@
   </nav>
 </header>
 
-<main class="container">
+<main class="main">
   <div class="page-title">
     <h1>生产者消费者问题可视化</h1>
-    <p class="subtitle">基于信号量 P/V 操作 · 环形缓冲区 · 同步与互斥演示</p>
+    <p>基于信号量 P/V 操作 · 环形缓冲区 · 同步与互斥演示</p>
   </div>
 
-  <section class="card controls">
-    <div class="control-group">
-      <label>缓冲区容量：
-        <input type="number" id="capacityInput" value="12" min="1" max="30">
-      </label>
+  <section class="card" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <label style="font-weight: 600; font-size: 14px; color: var(--text-secondary);">缓冲区容量：</label>
+      <input type="number" id="capacityInput" value="12" min="1" max="30" style="width: 70px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; text-align: center;">
       <button id="resetBtn" class="btn btn-primary">重置并开始</button>
-      <button id="pauseBtn" class="btn btn-secondary">暂停</button>
+      <button id="pauseBtn" class="btn btn-outline">暂停</button>
     </div>
-    <div class="control-group">
-      <label>速度：</label>
-      <input type="range" id="speedInput" min="0.25" max="4" step="0.25" value="1">
-      <span id="speedValue" class="badge">1x</span>
-    </div>
-  </section>
-
-  <section class="stats-grid">
-    <div class="card stat-card">
-      <span class="stat-label">empty (空闲缓冲区)</span>
-      <span class="stat-value" id="emptyCount">12</span>
-    </div>
-    <div class="card stat-card">
-      <span class="stat-label">full (已有产品)</span>
-      <span class="stat-value" id="fullCount">0</span>
-    </div>
-    <div class="card stat-card">
-      <span class="stat-label">mutex (互斥量)</span>
-      <span class="stat-value" id="mutexCount">1</span>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <label style="font-weight: 600; font-size: 14px; color: var(--text-secondary);">速度：</label>
+      <input type="range" id="speedInput" min="0.25" max="4" step="0.25" value="1" style="accent-color: var(--accent);">
+      <span id="speedValue" style="background: #eff6ff; color: var(--accent); padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: bold;">1x</span>
     </div>
   </section>
 
-  <section class="thread-grid">
-    <div class="card thread-card producer-thread" id="producerCard">
-      <div class="thread-header">
-        <h3>生产者线程</h3>
-        <span class="status-dot"></span>
+  <section style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+    <div class="card" style="text-align: center; padding: 24px; margin-bottom: 0;">
+      <span style="display: block; font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-bottom: 12px;">empty (空闲缓冲区)</span>
+      <span style="font-size: 32px; font-weight: 800;" id="emptyCount">12</span>
+    </div>
+    <div class="card" style="text-align: center; padding: 24px; margin-bottom: 0;">
+      <span style="display: block; font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-bottom: 12px;">full (已有产品)</span>
+      <span style="font-size: 32px; font-weight: 800;" id="fullCount">0</span>
+    </div>
+    <div class="card" style="text-align: center; padding: 24px; margin-bottom: 0;">
+      <span style="display: block; font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-bottom: 12px;">mutex (互斥量)</span>
+      <span style="font-size: 32px; font-weight: 800;" id="mutexCount">1</span>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div class="card thread-card producer-thread" id="producerCard" style="margin-bottom: 0; border-left: 6px solid var(--accent);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h3 style="margin: 0; font-size: 16px;">生产者线程</h3>
+        <span class="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: var(--border);"></span>
       </div>
-      <p id="producerStatus">未启动</p>
+      <p id="producerStatus" style="margin: 0; font-size: 15px; font-weight: 600; color: var(--text-secondary);">未启动</p>
     </div>
-    <div class="card thread-card consumer-thread" id="consumerCard">
-      <div class="thread-header">
-        <h3>消费者线程</h3>
-        <span class="status-dot"></span>
+    <div class="card thread-card consumer-thread" id="consumerCard" style="margin-bottom: 0; border-left: 6px solid var(--success);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h3 style="margin: 0; font-size: 16px;">消费者线程</h3>
+        <span class="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background: var(--border);"></span>
       </div>
-      <p id="consumerStatus">未启动</p>
+      <p id="consumerStatus" style="margin: 0; font-size: 15px; font-weight: 600; color: var(--text-secondary);">未启动</p>
     </div>
   </section>
 
-  <section class="card buffer-section">
-    <h2>环形缓冲区</h2>
-    <div class="buffer-legend">
-      <span><i class="legend-box empty"></i> 空缓冲区</span>
-      <span><i class="legend-box filled"></i> 有产品</span>
-      <span><i class="legend-border producer"></i> 生产指针</span>
-      <span><i class="legend-border consumer"></i> 消费指针</span>
+  <section class="card">
+    <h2 style="margin: 0 0 16px; font-size: 18px; border-left: 4px solid var(--accent); padding-left: 8px;">环形缓冲区</h2>
+    <div style="display: flex; gap: 24px; font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; justify-content: center;">
+      <span><i style="display: inline-block; width: 16px; height: 16px; border-radius: 4px; background: var(--bg-input); border: 1px solid var(--border); vertical-align: middle; margin-right: 6px;"></i>空缓冲区</span>
+      <span><i style="display: inline-block; width: 16px; height: 16px; border-radius: 4px; background: #dcfce7; border: 1px solid var(--success); vertical-align: middle; margin-right: 6px;"></i>有产品</span>
+      <span><i style="display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--danger); vertical-align: middle; margin-right: 6px;"></i>生产指针</span>
+      <span><i style="display: inline-block; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--accent); vertical-align: middle; margin-right: 6px;"></i>消费指针</span>
     </div>
-    
-    <div class="ring-container" id="bufferRing">
-      <div class="ring-center" id="ringCenter">等待开始</div>
+    <div class="ring-container" id="bufferRing" style="position: relative; width: 440px; height: 440px; margin: 0 auto; border: 2px dashed var(--border); border-radius: 50%; background: var(--bg-primary); display: flex; align-items: center; justify-content: center;">
+      <div class="ring-center" id="ringCenter" style="position: absolute; width: 160px; height: 160px; background: var(--bg-card); border: 4px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; z-index: 10;">等待开始</div>
     </div>
   </section>
 
-  <section class="card log-section">
-    <h2>运行日志</h2>
-    <ul id="logList" class="log-list"></ul>
+  <section class="card">
+    <h2 style="margin: 0 0 16px; font-size: 18px; border-left: 4px solid var(--accent); padding-left: 8px;">运行日志</h2>
+    <ul id="logList" style="list-style: none; margin: 0; padding: 0; max-height: 250px; overflow-y: auto; font-family: var(--mono); font-size: 13px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-primary);"></ul>
   </section>
 </main>
 

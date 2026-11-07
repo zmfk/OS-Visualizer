@@ -8,7 +8,6 @@
 </head>
 <body>
 
-<!-- 统一顶部导航栏 -->
 <header class="global-header">
   <div class="header-left">
     <span class="logo">⚡ OS Visualizer</span>
@@ -20,108 +19,87 @@
   </nav>
 </header>
 
-<main class="container">
+<main class="main">
   <div class="page-title">
     <h1>请求分页存储管理模拟</h1>
-    <p class="subtitle">硬件地址转换 · 缺页中断 · FIFO/LRU 动态演示</p>
+    <p>硬件地址转换 · 缺页中断 · FIFO/LRU 动态演示</p>
   </div>
 
-  <section class="controls card">
-    <div class="control-group">
-      <label>置换算法：
-        <select id="algorithmSelect">
-          <option value="FIFO">先进先出 (FIFO)</option>
-          <option value="LRU">最近最久未使用 (LRU)</option>
-        </select>
-      </label>
+  <section class="card" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <label style="font-weight: 600; font-size: 14px; color: var(--text-secondary);">置换算法：</label>
+      <select id="algorithmSelect" style="padding: 8px; border: 1px solid var(--border); border-radius: 8px; outline: none;">
+        <option value="FIFO">先进先出 (FIFO)</option>
+        <option value="LRU">最近最久未使用 (LRU)</option>
+      </select>
       <button id="startBtn" class="btn btn-primary">重置系统</button>
     </div>
-    
-    <div class="control-group addr-input-group">
-      <label>模拟逻辑地址：</label>
-      <input type="number" id="logicAddressInput" value="5000" placeholder="输入十进制地址">
-      <button id="accessBtn" class="btn btn-purple">访问该地址</button>
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <label style="font-weight: 600; font-size: 14px; color: var(--text-secondary);">模拟逻辑地址：</label>
+      <input type="number" id="logicAddressInput" value="5000" style="width: 100px; padding: 8px; border: 1px solid var(--border); border-radius: 8px;">
+      <button id="accessBtn" class="btn btn-outline" style="border-color: var(--purple); color: var(--purple);">访问该地址</button>
     </div>
   </section>
 
-  <section class="address-pipeline">
-    <div class="pipe-step" id="step-logic">
-      <span class="label">逻辑地址</span>
-      <span class="value">-</span>
+  <section class="card" style="display: flex; align-items: center; justify-content: space-between; background: #1e293b; color: white;">
+    <div class="pipe-step" id="step-logic" style="background: #334155; padding: 12px 24px; border-radius: 8px; min-width: 150px; text-align: center; border: 2px solid transparent;">
+      <span style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">逻辑地址</span><span class="value" style="font-size: 18px; font-weight: bold; font-family: var(--mono);">-</span>
     </div>
-    <div class="pipe-arrow">➔</div>
-    <div class="pipe-step" id="step-split">
-      <span class="label">拆分：页号 + 偏移</span>
-      <span class="value">-</span>
+    <div style="color: #64748b; font-size: 20px;">➔</div>
+    <div class="pipe-step" id="step-split" style="background: #334155; padding: 12px 24px; border-radius: 8px; min-width: 150px; text-align: center; border: 2px solid transparent;">
+      <span style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">拆分：页号 + 偏移</span><span class="value" style="font-size: 18px; font-weight: bold; font-family: var(--mono);">-</span>
     </div>
-    <div class="pipe-arrow">➔</div>
-    <div class="pipe-step" id="step-page">
-      <span class="label">查页表 (状态)</span>
-      <span class="value">-</span>
+    <div style="color: #64748b; font-size: 20px;">➔</div>
+    <div class="pipe-step" id="step-page" style="background: #334155; padding: 12px 24px; border-radius: 8px; min-width: 150px; text-align: center; border: 2px solid transparent;">
+      <span style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">查页表 (状态)</span><span class="value" style="font-size: 18px; font-weight: bold; font-family: var(--mono);">-</span>
     </div>
-    <div class="pipe-arrow">➔</div>
-    <div class="pipe-step" id="step-physics">
-      <span class="label">物理地址</span>
-      <span class="value">-</span>
+    <div style="color: #64748b; font-size: 20px;">➔</div>
+    <div class="pipe-step" id="step-physics" style="background: #334155; padding: 12px 24px; border-radius: 8px; min-width: 150px; text-align: center; border: 2px solid transparent;">
+      <span style="font-size: 12px; color: #94a3b8; display: block; margin-bottom: 4px;">物理地址</span><span class="value" style="font-size: 18px; font-weight: bold; font-family: var(--mono);">-</span>
     </div>
   </section>
 
-  <div class="main-content">
-    <section class="panel table-panel">
-      <h2>页表 (Page Table)</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>页号</th>
-            <th>状态位 (存在位)</th>
-            <th>物理块号</th>
-          </tr>
-        </thead>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+    <section class="card" style="margin-bottom: 0;">
+      <h2 style="margin: 0 0 16px; font-size: 18px; border-left: 4px solid var(--accent); padding-left: 8px;">页表 (Page Table)</h2>
+      <table style="width: 100%; border-collapse: collapse; text-align: center;">
+        <thead><tr style="background: var(--bg-primary); color: var(--text-secondary); font-size: 14px;"><th style="padding: 12px; border-bottom: 1px solid var(--border);">页号</th><th style="padding: 12px; border-bottom: 1px solid var(--border);">状态位 (存在位)</th><th style="padding: 12px; border-bottom: 1px solid var(--border);">物理块号</th></tr></thead>
         <tbody id="pageTableBody"></tbody>
       </table>
     </section>
 
-    <section class="panel memory-panel">
-      <h2>物理内存块 (共4块)</h2>
-      <div class="stats">
-        <span>缺页次数: <strong id="faultCount" class="red">0</strong></span>
-        <span>缺页率: <strong id="faultRate" class="red">0%</strong></span>
+    <section class="card" style="margin-bottom: 0;">
+      <h2 style="margin: 0 0 16px; font-size: 18px; border-left: 4px solid var(--accent); padding-left: 8px;">物理内存块 (共4块)</h2>
+      <div style="display: flex; gap: 24px; margin-bottom: 24px; font-size: 16px; font-weight: 600;">
+        <span>缺页次数: <strong id="faultCount" style="color: var(--danger); font-size: 24px;">0</strong></span>
+        <span>缺页率: <strong id="faultRate" style="color: var(--danger); font-size: 24px;">0%</strong></span>
       </div>
-      <div class="frames-container" id="framesContainer"></div>
+      <div class="frames-container" id="framesContainer" style="display: flex; gap: 16px; justify-content: center;"></div>
     </section>
   </div>
 
-  <section class="panel sequence-panel">
-    <h2>经典页面走向序列（点击“下一步”自动执行）</h2>
-    <div class="sequence-container" id="sequenceContainer"></div>
-    <div class="action-bar">
-      <button id="nextBtn" class="btn btn-secondary" disabled>单步执行下一步</button>
-      <button id="autoBtn" class="btn btn-secondary" disabled>自动播放</button>
+  <section class="card">
+    <h2 style="margin: 0 0 16px; font-size: 18px; border-left: 4px solid var(--accent); padding-left: 8px;">经典页面走向序列（点击“下一步”自动执行）</h2>
+    <div class="sequence-container" id="sequenceContainer" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;"></div>
+    <div style="display: flex; gap: 12px;">
+      <button id="nextBtn" class="btn btn-primary" disabled>单步执行下一步</button>
+      <button id="autoBtn" class="btn btn-primary" disabled>自动播放</button>
     </div>
   </section>
 
-  <section class="panel history-panel">
-    <h2>置换过程记录表</h2>
-    <div class="history-table-container">
-      <table id="historyTable">
-        <thead>
-          <tr>
-            <th>访问序列</th>
-            <th>状态</th>
-            <th>物理块 0</th>
-            <th>物理块 1</th>
-            <th>物理块 2</th>
-            <th>物理块 3</th>
-          </tr>
-        </thead>
+  <section class="card">
+    <h2 style="margin: 0 0 16px; font-size: 18px; border-left: 4px solid var(--accent); padding-left: 8px;">置换过程记录表</h2>
+    <div class="history-table-container" style="max-height: 320px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; scrollbar-gutter: stable;">
+      <table id="historyTable" style="width: 100%; table-layout: fixed; border-collapse: collapse;">
+        <thead><tr style="position: sticky; top: 0; background: var(--bg-primary); z-index: 2; color: var(--text-secondary); font-size: 14px;"><th style="padding: 12px; border-bottom: 1px solid var(--border);">访问序列</th><th style="padding: 12px; border-bottom: 1px solid var(--border);">状态</th><th style="padding: 12px; border-bottom: 1px solid var(--border);">物理块 0</th><th style="padding: 12px; border-bottom: 1px solid var(--border);">物理块 1</th><th style="padding: 12px; border-bottom: 1px solid var(--border);">物理块 2</th><th style="padding: 12px; border-bottom: 1px solid var(--border);">物理块 3</th></tr></thead>
         <tbody id="historyTableBody"></tbody>
       </table>
     </div>
   </section>
 
-  <section class="panel log-section">
-    <h2>执行日志</h2>
-    <ul id="logList"></ul>
+  <section class="card">
+    <h2 style="margin: 0 0 16px; font-size: 18px; border-left: 4px solid var(--accent); padding-left: 8px;">执行日志</h2>
+    <ul id="logList" style="list-style: none; padding: 0; margin: 0; font-family: var(--mono); font-size: 13px; max-height: 200px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px;"></ul>
   </section>
 </main>
 
